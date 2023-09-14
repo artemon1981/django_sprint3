@@ -32,8 +32,7 @@ class Category(models.Model):
 class Location(models.Model):
     name = models.CharField(
         max_length=256,
-        verbose_name='Название места'
-        )
+        verbose_name='Название места')
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
