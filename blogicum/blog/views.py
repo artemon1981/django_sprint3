@@ -5,9 +5,10 @@ from django.shortcuts import render, get_list_or_404, get_object_or_404
 
 from blog.models import Post, Category
 
+NUM_POST_ON_PAGE = 5
+
 
 def index(request):
-    NUM_POST_ON_PAGE = 5
     template = 'blog/index.html'
     post_list = Post.objects.select_related('category').filter(
         is_published=True,
