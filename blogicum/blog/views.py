@@ -1,17 +1,19 @@
-from django.shortcuts import render, get_list_or_404, get_object_or_404
-from django.db.models import Q
 from datetime import datetime
+
+from django.db.models import Q
+from django.shortcuts import render, get_list_or_404, get_object_or_404
 
 from blog.models import Post, Category
 
 
 def index(request):
+    NUM_POST_ON_PAGE = 5
     template = 'blog/index.html'
-    post_list = Post.objects.filter(
+    post_list = Post.objects.select_related('category').filter(
         is_published=True,
         category__is_published=True,
         pub_date__lt=datetime.now()
-    )[:5]
+    )[:NUM_POST_ON_PAGE]
     context = {'post_list': post_list}
     return render(request, template, context)
 
@@ -33,7 +35,7 @@ def post_detail(request, pk):
 def category_posts(request, category_slug):
     template = 'blog/category.html'
     post_list = get_list_or_404(
-        Post.objects.select_related('category').filter(
+        Post.objects.select_related('category', 'location').filter(
             category__slug=category_slug,
             is_published=True,
             pub_date__lt=datetime.now()
